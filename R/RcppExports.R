@@ -5,8 +5,12 @@ efron_pass_cpp <- function(t, e, X, beta) {
     .Call(`_coxstream_efron_pass_cpp`, t, e, X, beta)
 }
 
-efron_stream_chunk_inplace <- function(stream_addr, p, beta, S0_v, S1, S2, score, neg_H, t_open_v, n_pend_v, tS0_pend_v, tS1_pend, tS2_pend, ll_raw_v, sc_raw) {
-    .Call(`_coxstream_efron_stream_chunk_inplace`, stream_addr, p, beta, S0_v, S1, S2, score, neg_H, t_open_v, n_pend_v, tS0_pend_v, tS1_pend, tS2_pend, ll_raw_v, sc_raw)
+cox_alloc_arrow_array_stream <- function() {
+    .Call(`_coxstream_cox_alloc_arrow_array_stream`)
+}
+
+efron_stream_chunk_inplace <- function(stream_xptr, p, beta, S0_v, S1, S2, score, neg_H, t_open_v, n_pend_v, tS0_pend_v, tS1_pend, tS2_pend, ll_raw_v, sc_raw) {
+    .Call(`_coxstream_efron_stream_chunk_inplace`, stream_xptr, p, beta, S0_v, S1, S2, score, neg_H, t_open_v, n_pend_v, tS0_pend_v, tS1_pend, tS2_pend, ll_raw_v, sc_raw)
 }
 
 efron_flush_exact_inplace <- function(S0_v, S1, S2, score, neg_H, n_pend_v, tS0_pend_v, tS1_pend, tS2_pend, ll_raw_v, sc_raw) {

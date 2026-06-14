@@ -51,14 +51,13 @@ coxstream_arrow <- function(parquet_path, x_cols,
     beta   <- if (!is.null(init)) as.double(init) else rep(0.0, p)
     wanted <- c(time_col, event_col, x_cols)
 
-    # Arrow C Stream Interface plumbing: `allocate_arrow_array_stream()` returns
-    # an externalptr wrapping a zeroed C `ArrowArrayStream`; a chunk's
-    # `RecordBatchReader$export_to_c()` fills it; `external_pointer_addr_double()`
-    # yields its address, which efron_stream_chunk_inplace() reinterprets as the
-    # struct pointer. These arrow internals are the only public route to a raw C
-    # stream without a build-time dependency on the Arrow C++ libraries.
-    arrow_alloc_stream <- getFromNamespace("allocate_arrow_array_stream", "arrow")
-    arrow_ptr_addr     <- getFromNamespace("external_pointer_addr_double", "arrow")
+    # Arrow C Stream Interface plumbing, using only exported arrow API:
+    # cox_alloc_arrow_array_stream() (this package's C++) returns an external
+    # pointer owning a zeroed C `ArrowArrayStream`; a chunk's exported
+    # `RecordBatchReader$export_to_c()` fills it (arrow accepts any external
+    # pointer to an ArrowArrayStream); efron_stream_chunk_inplace() then reads
+    # the struct via that same pointer. No unexported arrow function and no
+    # build-time dependency on the Arrow C++ libraries are involved.
 
     # mmap = FALSE: read row groups via pread into heap buffers that are freed
     # after each chunk, so peak RAM stays at O(batch_size * p) regardless of n.
@@ -96,10 +95,10 @@ coxstream_arrow <- function(parquet_path, x_cols,
             tab    <- reader$ReadRowGroups(rg_idx, col_idx)[wanted]
             rows_seen <- rows_seen + tab$num_rows
             rbr    <- arrow::as_record_batch_reader(tab)
-            stream <- arrow_alloc_stream()
+            stream <- cox_alloc_arrow_array_stream()
             rbr$export_to_c(stream)
             ll_acc <- ll_acc + efron_stream_chunk_inplace(
-                arrow_ptr_addr(stream), p, beta,
+                stream, p, beta,
                 S0_v, S1, S2, score, neg_H,
                 t_open_v, n_pend_v, tS0_pend_v, tS1_pend, tS2_pend,
                 ll_raw_v, sc_raw

@@ -128,13 +128,42 @@ static double close_group_local(
     return ll_delta;
 }
 
+// Finalizer for a coxstream-owned ArrowArrayStream external pointer: release
+// any still-held stream resources (a well-behaved release callback nulls
+// itself per the Arrow C stream contract, so this is a no-op once
+// efron_stream_chunk_inplace() has already released it), then free the struct.
+static void cox_arrow_stream_finalizer(SEXP xp) {
+    ArrowArrayStream* s = static_cast<ArrowArrayStream*>(R_ExternalPtrAddr(xp));
+    if (s == nullptr) return;
+    if (s->release != nullptr) s->release(s);
+    delete s;
+    R_ClearExternalPtr(xp);
+}
+
+// Allocate a zeroed ArrowArrayStream and return it as an external pointer that
+// owns the struct. The caller fills it via the exported
+// RecordBatchReader$export_to_c() (arrow accepts any external pointer whose
+// address points to an ArrowArrayStream), then hands it to
+// efron_stream_chunk_inplace(). This replaces arrow's unexported
+// allocate_arrow_array_stream(): we own the struct layout via the vendored
+// arrow_c_abi.h, so no internal arrow function is needed.
+// [[Rcpp::export]]
+SEXP cox_alloc_arrow_array_stream() {
+    ArrowArrayStream* s = new ArrowArrayStream();
+    s->release = nullptr;  // empty until export_to_c() populates it
+    SEXP xp = PROTECT(R_MakeExternalPtr(s, R_NilValue, R_NilValue));
+    R_RegisterCFinalizerEx(xp, cox_arrow_stream_finalizer, TRUE);
+    UNPROTECT(1);
+    return xp;
+}
+
 // Consume one row-group chunk's Arrow stream, updating carry in place.
 // Returns the ll delta for all tie groups closed within this chunk. The final
 // pending group is closed once, after the last chunk, by
 // efron_flush_exact_inplace().
 // [[Rcpp::export]]
 double efron_stream_chunk_inplace(
-    double         stream_addr,  // address of an exported ArrowArrayStream
+    SEXP           stream_xptr,  // external ptr to an exported ArrowArrayStream
     int            p,
     NumericVector  beta,         // (p,) current coefficients (read-only)
     NumericVector  S0_v,         // (1,)   global carry: risk-set denominator
@@ -151,7 +180,7 @@ double efron_stream_chunk_inplace(
     NumericVector  sc_raw        // (p,)   local carry: sum raw X for pending events
 ) {
     ArrowArrayStream* stream =
-        reinterpret_cast<ArrowArrayStream*>(static_cast<uintptr_t>(stream_addr));
+        static_cast<ArrowArrayStream*>(R_ExternalPtrAddr(stream_xptr));
     if (stream == nullptr || stream->release == nullptr)
         Rcpp::stop("efron_stream: null or already-released Arrow stream");
 

@@ -24,13 +24,23 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
-// efron_stream_chunk_inplace
-double efron_stream_chunk_inplace(double stream_addr, int p, NumericVector beta, NumericVector S0_v, NumericVector S1, NumericMatrix S2, NumericVector score, NumericMatrix neg_H, NumericVector t_open_v, IntegerVector n_pend_v, NumericVector tS0_pend_v, NumericVector tS1_pend, NumericMatrix tS2_pend, NumericVector ll_raw_v, NumericVector sc_raw);
-RcppExport SEXP _coxstream_efron_stream_chunk_inplace(SEXP stream_addrSEXP, SEXP pSEXP, SEXP betaSEXP, SEXP S0_vSEXP, SEXP S1SEXP, SEXP S2SEXP, SEXP scoreSEXP, SEXP neg_HSEXP, SEXP t_open_vSEXP, SEXP n_pend_vSEXP, SEXP tS0_pend_vSEXP, SEXP tS1_pendSEXP, SEXP tS2_pendSEXP, SEXP ll_raw_vSEXP, SEXP sc_rawSEXP) {
+// cox_alloc_arrow_array_stream
+SEXP cox_alloc_arrow_array_stream();
+RcppExport SEXP _coxstream_cox_alloc_arrow_array_stream() {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< double >::type stream_addr(stream_addrSEXP);
+    rcpp_result_gen = Rcpp::wrap(cox_alloc_arrow_array_stream());
+    return rcpp_result_gen;
+END_RCPP
+}
+// efron_stream_chunk_inplace
+double efron_stream_chunk_inplace(SEXP stream_xptr, int p, NumericVector beta, NumericVector S0_v, NumericVector S1, NumericMatrix S2, NumericVector score, NumericMatrix neg_H, NumericVector t_open_v, IntegerVector n_pend_v, NumericVector tS0_pend_v, NumericVector tS1_pend, NumericMatrix tS2_pend, NumericVector ll_raw_v, NumericVector sc_raw);
+RcppExport SEXP _coxstream_efron_stream_chunk_inplace(SEXP stream_xptrSEXP, SEXP pSEXP, SEXP betaSEXP, SEXP S0_vSEXP, SEXP S1SEXP, SEXP S2SEXP, SEXP scoreSEXP, SEXP neg_HSEXP, SEXP t_open_vSEXP, SEXP n_pend_vSEXP, SEXP tS0_pend_vSEXP, SEXP tS1_pendSEXP, SEXP tS2_pendSEXP, SEXP ll_raw_vSEXP, SEXP sc_rawSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< SEXP >::type stream_xptr(stream_xptrSEXP);
     Rcpp::traits::input_parameter< int >::type p(pSEXP);
     Rcpp::traits::input_parameter< NumericVector >::type beta(betaSEXP);
     Rcpp::traits::input_parameter< NumericVector >::type S0_v(S0_vSEXP);
@@ -45,7 +55,7 @@ BEGIN_RCPP
     Rcpp::traits::input_parameter< NumericMatrix >::type tS2_pend(tS2_pendSEXP);
     Rcpp::traits::input_parameter< NumericVector >::type ll_raw_v(ll_raw_vSEXP);
     Rcpp::traits::input_parameter< NumericVector >::type sc_raw(sc_rawSEXP);
-    rcpp_result_gen = Rcpp::wrap(efron_stream_chunk_inplace(stream_addr, p, beta, S0_v, S1, S2, score, neg_H, t_open_v, n_pend_v, tS0_pend_v, tS1_pend, tS2_pend, ll_raw_v, sc_raw));
+    rcpp_result_gen = Rcpp::wrap(efron_stream_chunk_inplace(stream_xptr, p, beta, S0_v, S1, S2, score, neg_H, t_open_v, n_pend_v, tS0_pend_v, tS1_pend, tS2_pend, ll_raw_v, sc_raw));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -73,6 +83,7 @@ END_RCPP
 
 static const R_CallMethodDef CallEntries[] = {
     {"_coxstream_efron_pass_cpp", (DL_FUNC) &_coxstream_efron_pass_cpp, 4},
+    {"_coxstream_cox_alloc_arrow_array_stream", (DL_FUNC) &_coxstream_cox_alloc_arrow_array_stream, 0},
     {"_coxstream_efron_stream_chunk_inplace", (DL_FUNC) &_coxstream_efron_stream_chunk_inplace, 15},
     {"_coxstream_efron_flush_exact_inplace", (DL_FUNC) &_coxstream_efron_flush_exact_inplace, 11},
     {NULL, NULL, 0}

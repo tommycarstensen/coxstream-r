@@ -7,6 +7,14 @@
 \description{
 Fits the Cox proportional hazards model using a single descending-order pass per Newton-Raphson iteration. Peak RAM is O(p^2) regardless of the number of rows, making it suitable for datasets that do not fit in memory. Produces identical coefficients to survival::coxph() with Efron tie correction.
 }
+\seealso{
+Useful links:
+\itemize{
+  \item \url{https://github.com/tommycarstensen/coxstream-r}
+  \item Report bugs at \url{https://github.com/tommycarstensen/coxstream-r/issues}
+}
+
+}
 \author{
 \strong{Maintainer}: Tommy Carstensen \email{cran@tommycarstensen.com} (\href{https://orcid.org/0000-0002-3672-9931}{ORCID})
 
