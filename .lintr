@@ -1,0 +1,6 @@
+linters: linters_with_defaults(
+    line_length_linter(100L),
+    object_name_linter("snake_case"),
+    trailing_whitespace_linter()
+  )
+encoding: "UTF-8"
