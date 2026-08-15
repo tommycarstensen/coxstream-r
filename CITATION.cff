@@ -1,0 +1,35 @@
+cff-version: 1.2.0
+message: "If you use this software, please cite it as below."
+title: "coxstream: Memory-Efficient Cox Proportional Hazards via Streaming Newton-Raphson"
+abstract: >-
+  An R implementation of the Cox proportional hazards model for datasets larger
+  than RAM. It uses a single descending-order pass per Newton-Raphson iteration,
+  so peak memory is O(p^2) regardless of the number of rows, and produces
+  coefficients identical to survival::coxph() with the Efron tie correction.
+type: software
+authors:
+  - family-names: Carstensen
+    given-names: Tommy
+    orcid: "https://orcid.org/0000-0002-3672-9931"
+    affiliation: "Benros Research Group"
+    email: "zenodo@tommycarstensen.com"
+version: "0.1.0"
+date-released: "2026-06-14"
+license: MIT
+repository-code: "https://github.com/tommycarstensen/coxstream-r"
+url: "https://github.com/tommycarstensen/coxstream-r"
+# Concept DOI: always resolves to the latest version, so it need not change
+# per release. Version-specific DOIs are listed under identifiers.
+doi: "10.5281/zenodo.20694001"
+identifiers:
+  - type: doi
+    value: "10.5281/zenodo.20694002"
+    description: "Version DOI for v0.1.0"
+keywords:
+  - survival analysis
+  - Cox proportional hazards
+  - out-of-core
+  - streaming
+  - epidemiology
+  - registry data
+  - R
