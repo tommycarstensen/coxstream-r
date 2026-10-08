@@ -11,7 +11,6 @@ authors:
   - family-names: Carstensen
     given-names: Tommy
     orcid: "https://orcid.org/0000-0002-3672-9931"
-    affiliation: "Benros Research Group"
     email: "zenodo@tommycarstensen.com"
 version: "0.1.0"
 date-released: "2026-06-14"

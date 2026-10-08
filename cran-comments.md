@@ -7,9 +7,7 @@ New submission of coxstream 0.1.0.
 ## Test environments
 
 - local: macOS (R 4.6.0), `R CMD check --as-cran`
-- win-builder: devel and release, via `devtools::check_win_devel()` /
-  `devtools::check_win_release()`
-- R-hub / GitHub Actions: ubuntu-latest (release + devel), macOS, windows
+- win-builder: R-devel and R-release (source tarball uploaded)
 
 ## R CMD check results
 

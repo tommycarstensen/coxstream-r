@@ -1,5 +1,7 @@
 # coxstream
 
+[![DOI](https://zenodo.org/badge/1269532103.svg)](https://doi.org/10.5281/zenodo.20694001)
+
 Memory-efficient Cox proportional hazards regression via streaming
 Newton-Raphson. Peak RAM is O(p^2) in the number of covariates and flat in the
 number of rows n, so models fit on datasets that do not fit in memory.
@@ -8,6 +10,10 @@ Coefficients are identical to `survival::coxph()` with Efron tie correction.
 ![coxstream (Python and R) holds peak RAM flat as the cohort grows, while in-memory solvers (lifelines, survival::coxph) scale with n; coefficients agree to machine precision.](https://raw.githubusercontent.com/tommycarstensen/coxstream-r/main/docs/benchmark.png)
 
 ## Installation
+
+From CRAN:
+
+    install.packages("coxstream")
 
 Development version from GitHub:
 
